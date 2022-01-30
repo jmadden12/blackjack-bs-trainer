@@ -1,4 +1,9 @@
 #include <stdio.h>
+#include <string.h>
+
+void charactersFromHand(char* hand, char* a, char* b){
+    sscanf(hand, "%c%c", a, b);
+}
 
 int getCardValue(char card){
     if(card == 'T' || card == 'J' || card == 'Q' || card == 'K'){
@@ -48,14 +53,19 @@ void translatePlayerHand(char* receive, char a, char b){
 }
 
 
-int main(){
-    while(1){
-        char a;
-        char b;
-        char receive[3];
-        scanf("%c%c", &a, &b);  
-        translatePlayerHand(&receive[0], a, b);
-        printf("%s\n", receive);
+void testCardValueHandTranslate(){
+    char* testCases[12] = {"QQ", "QJ", "22", "AA", "3A", "A2", "A6", "7A", "7T", "8J", "65", "34"};
+    char* testAnsrs[12] = {"TT", "TT", "22", "AA", "A3", "A2", "A6", "A7", "17", "18", "11", "07"};
+    for(int i = 0; i < 12; i++){
+        char answer[3];
+        char a, b;
+        charactersFromHand(testCases[i], &a, &b);
+        translatePlayerHand(answer, a, b);
+        printf("Case: %s, Output: %s, Answer: %s, strcmp: %d\n", testCases[i], answer, testAnsrs[i], strcmp(testAnsrs[i], answer));
     }
+}
+
+int main(){
+    testCardValueHandTranslate();
     return 0;
 }
