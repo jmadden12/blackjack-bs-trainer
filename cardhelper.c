@@ -1,4 +1,9 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include "cardhelper.h"
 
 void charactersFromHand(char* hand, char* a, char* b){
     sscanf(hand, "%c%c", a, b);
@@ -49,4 +54,40 @@ void translatePlayerHand(char* receive, char a, char b){
         }
     }
     receive[2] = '\0';
+}
+
+double checkPlayerResponse(char* hand, char upcard, char* response, char** table){
+    double correct = 0;
+    for(int i = 0; i < ((NUM_DEALER_CARDS + 1) * NUM_PLAYER_HANDS); i+= (NUM_DEALER_CARDS + 1)){
+        if(strncmp(table[i], hand, 2) == 0){
+            if(strncmp(table[i + getCardValue(upcard)], response, 1) == 0){
+                printf("Correct response! \n");
+                correct = 1;
+                break;
+            } else {
+                printf("Incorrect response: correct response was %s\n", table[i + getCardValue(upcard)]);
+                correct = 0;
+                break;
+            }
+        }
+    }
+    return correct;
+}
+
+char generateDealerCard(){
+    char possible[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
+    srand((unsigned int)time(NULL));
+    int card = rand() % 13;
+    return possible[card];
+}
+
+char* generatePlayerHand(){
+    char possible[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
+    srand((unsigned int)time(NULL) + 4);
+    int card1 = rand() % 13;
+    int card2 = rand() % 13;
+    char* hand = calloc(3, sizeof(char));
+    hand[0] = possible[card1];
+    hand[1] = possible[card2];
+    return hand;
 }
